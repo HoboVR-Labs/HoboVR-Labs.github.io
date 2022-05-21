@@ -10,15 +10,11 @@ body {
     font-family: "Dejavu Sans", sans-serif;
 }
 
-header {
-    padding-top: 16px;
-    padding-left: 10%;
-    padding-right: 10%;
-    /*padding-bottom: 5em;*/
-}
-
 h1, h2, h3, h4, p {
     color: white;
+}
+header {
+    padding-top: 16px;
 }
 
 .team-container {
@@ -34,7 +30,7 @@ h1, h2, h3, h4, p {
 
 .team-element {
     width: 400px;
-    margin: 5px 20px;
+    margin: 5px 20px 40px;
 }
 
 .team-element .mugshot {
@@ -46,15 +42,14 @@ h1, h2, h3, h4, p {
     width: 25px;
     height: 25px;
     border-radius: 20px;
+    display: block;
 }
 
 .button-container a {
     padding: 14px;
-    color: white;
+    color: white !important;
     background-color: #ff0070;
     border-radius: 15px;
-
-    background-image: linear-gradient(to left, rgba(58, 213, 254, 0.5), rgba(0, 0, 0, 0));
 
     text-align: center-left;
     text-decoration: none;
@@ -170,10 +165,26 @@ nav a.selected {
     background-color: #00a1b2;
 }
 
+@media (max-width:500px) {
+    header {
+        padding-left: 5%;
+        padding-right: 5%;
+        text-align: center;
+    }
+    .logo {
+        margin: 0 auto;
+        float: none;
+    }
+    header nav a {
+        padding: 12px;
+    }
+}
 
 @media (min-width:501px) {
     header {
         margin-bottom: 5rem;
+        padding-left: 10%;
+        padding-right: 10%;
     }
 }
 
@@ -199,9 +210,17 @@ nav a.selected {
         font-size: 80%;
     }
 
-    .center-mid {
-        margin-left: 17%;
-        margin-right: 17%;
+    .team-element img,
+    .team-element h2,
+    .team-element h4 {
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .center-mid,
+    .center-left {
+        margin-left: 10%;
+        margin-right: 10%;
     }
 }
 
