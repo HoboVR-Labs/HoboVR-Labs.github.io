@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>An Introduction to Drivers &mdash; HoboVR Labs 0.6.6-stable documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/dark.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Driver Interfaces" href="../driver-interfaces/" />
+    <link rel="prev" title="Contributing" href="../../contribution/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../" class="icon icon-home"> HoboVR Labs
+            <img src="../../_static/hobovr-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.6.6
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribution/">Contributing</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">An Introduction to Drivers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#driver-directory">Driver Directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#driver-manifest-file">Driver Manifest File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#driver-resources">Driver Resources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#status-icons">Status Icons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-profiles">Input Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#localization">Localization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#render-models">Render Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#firmware">Firmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#animations">Animations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#driver-relative-paths">Driver Relative Paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#surface-level-driver-abi">Surface Level Driver ABI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hmd-driver-factory">HMD Driver Factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#driver-interfaces">Driver Interfaces</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../driver-interfaces/">Driver Interfaces</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">HoboVR Labs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home"></a> &raquo;</li>
+      <li>An Introduction to Drivers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/HoboVR-Labs/docs.hobovrlabs.org/blob/master/openvr/introduction.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="an-introduction-to-drivers">
+<h1>An Introduction to Drivers<a class="headerlink" href="#an-introduction-to-drivers" title="Permalink to this headline"></a></h1>
+<p>SteamVR uses dynamic libraries to load drivers, and as it turns out, all that a dynamic library needs to do to be recognized as a driver, is export <em>a single function</em> <code class="docutils literal notranslate"><span class="pre">void*</span> <span class="pre">HmdDriverFactory(const</span> <span class="pre">char</span> <span class="pre">*pInterfaceName,</span> <span class="pre">int</span> <span class="pre">*pReturnCode)</span></code>… <em>And</em> have a nice driver directory and be built for both 32 and 64 bit instructions <em>AND</em> use very specific interfaces in the driver ABI… In short, its a mess. But it doesn’t have to be, hopefully this page helps with that.</p>
+<section id="driver-directory">
+<span id="opevr-driver-directories"></span><h2>Driver Directory<a class="headerlink" href="#driver-directory" title="Permalink to this headline"></a></h2>
+<p>Driver directories have only 1 mandatory component: a <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code> file, which describes how the contents of the driver directory will be used. See <a class="reference internal" href="#driver-manifest-file">Driver Manifest File</a>.</p>
+<p>Everything else is technically optional, but you won’t have a driver otherwise so yeah.</p>
+<p>Driver directories can be either a “resource only” driver, or a fully fledged driver. That is specified in the <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code> file using the <code class="docutils literal notranslate"><span class="pre">&quot;resourceOnly&quot;</span></code> bool field. See <a class="reference internal" href="#driver-resources">Driver Resources</a>.</p>
+<p>If your driver directory is “resource only”, your driver will only have a single sub-directory <code class="docutils literal notranslate"><span class="pre">resources</span></code>, again see <a class="reference internal" href="#driver-resources">Driver Resources</a>. Here is a few examples of resource only driver directories(pulled from SteamVR):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tree -L <span class="m">2</span> indexhmd/
+indexhmd/
+├── driver.vrdrivermanifest
+└── resources
+    ├── additional.vrsettings
+    ├── driver.vrresources
+    ├── firmware
+    ├── icons
+    ├── index_hmd_overrides.bin
+    └── input
+
+<span class="m">4</span> directories, <span class="m">4</span> files
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tree -L <span class="m">2</span> indexcontroller/
+indexcontroller/
+├── driver.vrdrivermanifest
+└── resources
+    ├── anims
+    ├── driver.vrresources
+    ├── firmware
+    ├── icons
+    ├── input
+    ├── localization
+    └── rendermodels
+
+<span class="m">7</span> directories, <span class="m">2</span> files
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tree -L <span class="m">2</span> tundra_labs/
+tundra_labs/
+├── driver.vrdrivermanifest
+└── resources
+    ├── driver.vrresources
+    ├── firmware
+    ├── icons
+    ├── input
+    ├── localization
+    └── rendermodels
+
+<span class="m">6</span> directories, <span class="m">2</span> files
+</pre></div>
+</div>
+<p>However if your driver directory is indented for an actual driver, you’ll need to add sub-directory <code class="docutils literal notranslate"><span class="pre">bin</span></code>. <code class="docutils literal notranslate"><span class="pre">bin</span></code> stores the compiled driver, however SteamVR expects you to put architecture specific versions of your compiled driver into platform specific sub-directories. Resources are still allowed, and function exactly as they do in the “resource only” case. Here are a few examples of resource only driver directories(pulled from SteamVR):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tree -L <span class="m">2</span> lighthouse/
+lighthouse/
+├── bin
+│    ├── linux32
+│    ├── linux64
+│    ├── win32
+│    └── win64
+├── driver.vrdrivermanifest
+└── resources
+    ├── anims
+    ├── driver.vrresources
+    ├── firmware
+    ├── icons
+    ├── lighthouse_scale.json
+    ├── settings
+    ├── webhelperoverlays.json
+    └── webinterface
+
+<span class="m">9</span> directories, <span class="m">4</span> files
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tree -L <span class="m">2</span> gamepad/
+gamepad/
+├── bin
+│    ├── linux32
+│    ├── linux64
+│    ├── win32
+│    └── win64
+├── driver.vrdrivermanifest
+└── resources
+    ├── icons
+    ├── input
+    └── localization
+
+<span class="m">7</span> directories, <span class="m">1</span> file
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tree -L <span class="m">2</span> null/
+null/
+├── bin
+│    ├── linux32
+│    ├── linux64
+│    ├── win32
+│    └── win64
+├── driver.vrdrivermanifest
+└── resources
+    └── settings
+
+<span class="m">5</span> directories, <span class="m">1</span> file
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tree -L <span class="m">2</span> hobovr/
+hobovr/
+├── bin
+│    ├── linux32
+│    ├── linux64
+│    ├── win32
+│    └── win64
+├── driver.vrdrivermanifest
+└── resources
+    ├── driver.vrresources
+    ├── icons
+    ├── input
+    ├── rendermodels
+    └── settings
+
+<span class="m">10</span> directories, <span class="m">2</span> files
+</pre></div>
+</div>
+</section>
+<section id="driver-manifest-file">
+<h2>Driver Manifest File<a class="headerlink" href="#driver-manifest-file" title="Permalink to this headline"></a></h2>
+<p>This file determines how the driver will be recognized by SteamVR. It needs to be placed in the root of your driver directory and have this name: <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code>.</p>
+<p>The contents of this file need to look like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;alwaysActivate&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;example&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;directory&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;resourceOnly&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;hmd_presence&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;*.*&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">],</span><span class="w"></span>
+
+<span class="w">    </span><span class="nt">&quot;other_presence&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>And here is what it does:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;name&quot;</span></code>: str - Globally unique name of the driver, this also sets the driver binary name <code class="docutils literal notranslate"><span class="pre">driver_&lt;name&gt;.dll</span></code> or <code class="docutils literal notranslate"><span class="pre">driver_&lt;name&gt;.so</span></code>. The driver name is the name of the directory that contains the <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code> file if it is not specified.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;alwaysActive&quot;</span></code>: bool - If this is true this driver will be activated even if the active HMD is from another driver. Defaults to false.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;directory&quot;</span></code>: str - The name of the directory that contains the rest of the driver files. If this is a relative path it is relative to the directory that contains <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code>. Defaults to the full path contains <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code> (literally never seen it used).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;resourceOnly&quot;</span></code>: bool - Set this to true if your driver directory only contains resources.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;hmd_presence&quot;</span></code>: list of str - This is an array of strings that identify the USB VID and PID combinations that indicate an HMD from this driver is probably present. Each entry should be hex values, separated by a period (<code class="docutils literal notranslate"><span class="pre">*</span></code> means any): <code class="docutils literal notranslate"><span class="pre">&quot;&lt;vid&gt;.&lt;pid&gt;&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;other_presence&quot;</span></code>: list of str - An array of strings in the same format as hmd_presence that indicates that there is a non-HMD device plugged in (optional, never seen it used).</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="driver-resources">
+<h2>Driver Resources<a class="headerlink" href="#driver-resources" title="Permalink to this headline"></a></h2>
+<section id="status-icons">
+<h3>Status Icons<a class="headerlink" href="#status-icons" title="Permalink to this headline"></a></h3>
+<p>First lets talk about something easy and nice, device status icons. If you ever bothered to read the code comments in the official <a class="reference external" href="https://github.com/ValveSoftware/openvr/blob/master/samples/driver_sample/driver_sample.cpp#L208">driver sample</a>, you’d find a rather interesting section that mentions how to configure device status icons outside of driver code using a <code class="docutils literal notranslate"><span class="pre">driver.vrresources</span></code> file.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Icons can be configured in code or automatically configured by an external file &quot;drivername\resources\driver.vrresources&quot;.</span>
+<span class="c1">// Icon properties NOT configured in code (post Activate) are then auto-configured by the optional presence of a driver&#39;s &quot;drivername\resources\driver.vrresources&quot;.</span>
+<span class="c1">// In this manner a driver can configure their icons in a flexible data driven fashion by using an external file.</span>
+<span class="c1">//</span>
+<span class="c1">// The structure of the driver.vrresources file allows a driver to specialize their icons based on their HW.</span>
+<span class="c1">// Keys matching the value in &quot;Prop_ModelNumber_String&quot; are considered first, since the driver may have model specific icons.</span>
+<span class="c1">// An absence of a matching &quot;Prop_ModelNumber_String&quot; then considers the ETrackedDeviceClass (&quot;HMD&quot;, &quot;Controller&quot;, &quot;GenericTracker&quot;, &quot;TrackingReference&quot;)</span>
+<span class="c1">// since the driver may have specialized icons based on those device class names.</span>
+<span class="c1">//</span>
+<span class="c1">// An absence of either then falls back to the &quot;system.vrresources&quot; where generic device class icons are then supplied.</span>
+<span class="c1">//</span>
+<span class="c1">// Please refer to &quot;bin\drivers\sample\resources\driver.vrresources&quot; which contains this sample configuration.</span>
+<span class="c1">//</span>
+<span class="c1">// &quot;Alias&quot; is a reserved key and specifies chaining to another json block.</span>
+<span class="c1">//</span>
+<span class="c1">// In this sample configuration file (overly complex FOR EXAMPLE PURPOSES ONLY)....</span>
+<span class="c1">//</span>
+<span class="c1">// &quot;Model-v2.0&quot; chains through the alias to &quot;Model-v1.0&quot; which chains through the alias to &quot;Model-v Defaults&quot;.</span>
+<span class="c1">//</span>
+<span class="c1">// Keys NOT found in &quot;Model-v2.0&quot; would then chase through the &quot;Alias&quot; to be resolved in &quot;Model-v1.0&quot; and either resolve their or continue through the alias.</span>
+<span class="c1">// Thus &quot;Prop_NamedIconPathDeviceAlertLow_String&quot; in each model&#39;s block represent a specialization specific for that &quot;model&quot;.</span>
+<span class="c1">// Keys in &quot;Model-v Defaults&quot; are an example of mapping to the same states, and here all map to &quot;Prop_NamedIconPathDeviceOff_String&quot;.</span>
+</pre></div>
+</div>
+<p>An all around good explanation, until you look in <code class="docutils literal notranslate"><span class="pre">driver.vrresources</span></code> that is provided with the sample driver…</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;jsonid&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vrresources&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;statusicons&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;HMD&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_off.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceSearching_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_searching.gif&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceSearchingAlert_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_searching_alert.gif&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceReady_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_ready.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceReadyAlert_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_ready_alert.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceNotReady_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_error.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceStandby_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_standby.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceAlertLow_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_ready_low.png&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+
+<span class="w">        </span><span class="nt">&quot;Model-v Defaults&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_sample_status_off.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceSearching_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceSearchingAlert_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceReady_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceReadyAlert_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceNotReady_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceStandby_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceAlertLow_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+
+<span class="w">        </span><span class="nt">&quot;Model-v1.0&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Alias&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Model-v Defaults&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceAlertLow_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_model1_alertlow.png&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+
+<span class="w">        </span><span class="nt">&quot;Model-v2.0&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Alias&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Model-v1.0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceAlertLow_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/headset_model2_alertlow.png&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+
+<span class="w">        </span><span class="nt">&quot;Controller&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceOff_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_off.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceSearching_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_searching.gif&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceSearchingAlert_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_searching_alert.gif&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceReady_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_ready.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceReadyAlert_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_ready_alert.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceNotReady_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_error.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceStandby_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_standby.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="nt">&quot;Prop_NamedIconPathDeviceAlertLow_String&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{sample}/icons/controller_status_ready_low.png&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>What are these <code class="docutils literal notranslate"><span class="pre">Prop</span></code> things? What does <code class="docutils literal notranslate"><span class="pre">{sample}</span></code> mean? Why are some icons gifs and others pngs?</p>
+<p>Lets start with the <code class="docutils literal notranslate"><span class="pre">Prop</span></code> things. The full list of acceptable keys can be found in <a class="reference external" href="https://github.com/ValveSoftware/openvr/blob/master/headers/openvr_driver.h#L524">openvr_driver.h</a> in the <code class="docutils literal notranslate"><span class="pre">ETrackedDeviceProperty</span></code> enum:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// *other enum members*</span>
+
+<span class="c1">// Properties that are used for user interface like icons names</span>
+<span class="n">Prop_IconPathName_String</span><span class="w">                        </span><span class="o">=</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="c1">// DEPRECATED. Value not referenced. Now expected to be part of icon path properties.</span>
+<span class="n">Prop_NamedIconPathDeviceOff_String</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">5001</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceSearching_String</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">5002</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceSearchingAlert_String</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">5003</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceReady_String</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">5004</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceReadyAlert_String</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">5005</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceNotReady_String</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">5006</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceStandby_String</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">5007</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceAlertLow_String</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">5008</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+<span class="n">Prop_NamedIconPathDeviceStandbyAlert_String</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">5009</span><span class="p">,</span><span class="w"> </span><span class="c1">// {driver}/icons/icon_filename - PNG for static icon, or GIF for animation, 50x32px for headsets and 32x32px for others</span>
+
+<span class="c1">// *other enum members*</span>
+</pre></div>
+</div>
+<p>The convenient code comments, which also explain the gif and png situation.</p>
+<p>Now onto the <code class="docutils literal notranslate"><span class="pre">{sample}</span></code> and <code class="docutils literal notranslate"><span class="pre">{driver}</span></code> from prop comments. Which has to do with path resolution. You see SteamVR allows you register your driver from anywhere, you can use <code class="docutils literal notranslate"><span class="pre">{name</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">driver}</span></code> in the beginning of paths, it will then be replaced with the path to that driver + <code class="docutils literal notranslate"><span class="pre">/resources</span></code>. See <a class="reference internal" href="#driver-relative-paths">Driver Relative Paths</a>.</p>
+<p>Last thing about icons that you need to know is that you can have variants of icons without changing any of the resource configs. You can do that by a <code class="docutils literal notranslate"><span class="pre">&#64;2x</span></code> suffix before the extension to the variant icon names to add a 2 times higher res icon, adding a <code class="docutils literal notranslate"><span class="pre">.b4bfb144</span></code> suffix to the variant icon will make it the default variant on Windows, and you can also combine them, but <code class="docutils literal notranslate"><span class="pre">&#64;2x</span></code> needs to be the first suffix. For good measure here is an example(pulled from SteamVR):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tree -L <span class="m">2</span> indexhmd/resources/icons/
+indexhmd/resources/icons/
+├── headset_status_error@2x.b4bfb144.png
+├── headset_status_error@2x.png
+├── headset_status_error.b4bfb144.png
+├── headset_status_error.png
+├── headset_status_off@2x.6e6c89c9.png
+├── headset_status_off@2x.png
+├── headset_status_off.6e6c89c9.png
+├── headset_status_off.png
+├── headset_status_ready@2x.b4bfb144.png
+├── headset_status_ready@2x.png
+├── headset_status_ready_alert@2x.b4bfb144.png
+├── headset_status_ready_alert@2x.png
+├── headset_status_ready_alert.b4bfb144.png
+├── headset_status_ready_alert.png
+├── headset_status_ready.b4bfb144.png
+├── headset_status_ready.png
+├── headset_status_searching@2x.b4bfb144.gif
+├── headset_status_searching@2x.gif
+├── headset_status_searching_alert@2x.b4bfb144.gif
+├── headset_status_searching_alert@2x.gif
+├── headset_status_searching_alert.b4bfb144.gif
+├── headset_status_searching_alert.gif
+├── headset_status_searching.b4bfb144.gif
+├── headset_status_searching.gif
+├── headset_status_standby@2x.b4bfb144.png
+├── headset_status_standby@2x.png
+├── headset_status_standby_alert@2x.b4bfb144.png
+├── headset_status_standby_alert@2x.png
+├── headset_status_standby_alert.b4bfb144.png
+├── headset_status_standby_alert.png
+├── headset_status_standby.b4bfb144.png
+├── headset_status_standby.png
+└── indexhmd.svg
+
+<span class="m">0</span> directories, <span class="m">33</span> files
+</pre></div>
+</div>
+</section>
+<section id="input-profiles">
+<h3>Input Profiles<a class="headerlink" href="#input-profiles" title="Permalink to this headline"></a></h3>
+<p>Json with a lot of hate (WIP)</p>
+</section>
+<section id="localization">
+<h3>Localization<a class="headerlink" href="#localization" title="Permalink to this headline"></a></h3>
+<p>WIP</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Writer’s note: Ok, i’m gonna be straight with you, this is not mentioned anywhere, we have nothing! Take everything here with a massive grain of salt, figuring out how it works is like piecing together a log out of saw dust.</p>
+<p>You are more than welcome to update our documentation, if you see something inaccurate. See <a class="reference internal" href="../../contribution/#contrib-section"><span class="std std-ref">Contributing</span></a>.</p>
+</div>
+</section>
+<section id="render-models">
+<h3>Render Models<a class="headerlink" href="#render-models" title="Permalink to this headline"></a></h3>
+<p>Obj models with a hint of json hate (WIP)</p>
+</section>
+<section id="firmware">
+<h3>Firmware<a class="headerlink" href="#firmware" title="Permalink to this headline"></a></h3>
+<p>Its not in any examples, it is mentioned a lot in the <code class="docutils literal notranslate"><span class="pre">openvr_driver.h</span></code> header though. You might be able to use the “automatic™ SteamVR™ firmware™ updater™ tool™ thingymajig™®©℠℗” using the combination of <code class="docutils literal notranslate"><span class="pre">VREvent_FirmwareUpdateStarted</span></code> and <code class="docutils literal notranslate"><span class="pre">VREvent_FirmwareUpdateFinished</span></code> events together with <code class="docutils literal notranslate"><span class="pre">EVRFirmwareError</span></code> enum, firmware related props and files in <code class="docutils literal notranslate"><span class="pre">{driver</span> <span class="pre">name}/firmware/</span></code>. We don’t really now the specific on how to use the “automatic™ SteamVR™ firmware™ updater™ tool™ thingymajig™®©℠℗”. What we do know is how to trigger the manual firmware update notification for the user which will redirect the user to a url from <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_ManualUpdateURL_String</span></code>. Well how do you do that then? Simple just set <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_UpdateAvailable_Bool</span></code> and <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_ManualUpdate_Bool</span></code> to true using the <code class="docutils literal notranslate"><span class="pre">VRProperties</span></code> interface. See <a class="reference internal" href="../driver-interfaces/#vrproperties-interface"><span class="std std-ref">VRProperties Interface</span></a>.</p>
+</section>
+<section id="animations">
+<h3>Animations<a class="headerlink" href="#animations" title="Permalink to this headline"></a></h3>
+<p>I got nothing for you yet again x)</p>
+<p>The only thing I know about it, is that Index and Oculus controller drivers use them. Animations can be found in <code class="docutils literal notranslate"><span class="pre">{driver</span> <span class="pre">name}/anims/</span></code>. Why are they there? What are they used for? How do <em>you</em> use it in <em>your</em> driver? And the answers to those are: No idea. No clue. And I wish I knew.</p>
+<p>This is not mentioned in any examples, hell there is no mention of the word <code class="docutils literal notranslate"><span class="pre">anim</span></code> in <code class="docutils literal notranslate"><span class="pre">openvr_driver.h</span></code>. As far as i can tell it’s not mentioned anywhere, if you have <em>any</em> info about it, it would help a lot if you could update this section. See <a class="reference internal" href="../../contribution/#contrib-section"><span class="std std-ref">Contributing</span></a>.</p>
+<p>Update: Actually turns out there is an issue on the topic. See <a class="reference external" href="https://github.com/ValveSoftware/openvr/issues/1552">OpenVR Issue 1552</a>.</p>
+</section>
+</section>
+<section id="driver-relative-paths">
+<h2>Driver Relative Paths<a class="headerlink" href="#driver-relative-paths" title="Permalink to this headline"></a></h2>
+<p>After you register a driver SteamVR will interpret <code class="docutils literal notranslate"><span class="pre">{name</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">driver}</span></code> as <code class="docutils literal notranslate"><span class="pre">/path/to/your/driver/resources</span></code>, only works when paths are processed by OpenVR/SteamVR tools. Example: When setting icons for devices(either for status icons, bindings, models or other resources), to use icons shipped with your driver, you can use <code class="docutils literal notranslate"><span class="pre">{name</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">driver}/icons/icon_name.png</span></code>.</p>
+</section>
+<section id="surface-level-driver-abi">
+<h2>Surface Level Driver ABI<a class="headerlink" href="#surface-level-driver-abi" title="Permalink to this headline"></a></h2>
+<p>To be a functional driver you need to compile your source into a DLL or a Shared Object (depending on which platform you use).</p>
+<section id="hmd-driver-factory">
+<h3>HMD Driver Factory<a class="headerlink" href="#hmd-driver-factory" title="Permalink to this headline"></a></h3>
+<p>Your driver needs to export only a single symbol which is a function that with the following signature: <code class="docutils literal notranslate"><span class="pre">void*</span> <span class="pre">HmdDriverFactory(const</span> <span class="pre">char</span> <span class="pre">*pInterfaceName,</span> <span class="pre">int</span> <span class="pre">*outReturnCode)</span></code></p>
+<p>How does it work? Dead simple actually, <code class="docutils literal notranslate"><span class="pre">pInterfaceName</span></code> is a null terminated string with the name of the interface SteamVR runtime requests from your driver, if your driver implements the requested interface, return a raw pointer to it, if it does not match any of the interfaces implemented by your driver set <code class="docutils literal notranslate"><span class="pre">*outReturnCode</span></code> to <code class="docutils literal notranslate"><span class="pre">VRInitError_Init_InterfaceNotFound</span></code> and return <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
+<p>Why? Interfaces implemented in your driver get to SteamVR runtime through this function.</p>
+</section>
+<section id="driver-interfaces">
+<h3>Driver Interfaces<a class="headerlink" href="#driver-interfaces" title="Permalink to this headline"></a></h3>
+<p>Honestly this topic is too big to be in the general surface level introduction to driver ABI, so it’s been moved to it’s own page <a class="reference internal" href="../driver-interfaces/#driver-interfaces"><span class="std std-ref">Driver Interfaces</span></a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../contribution/" class="btn btn-neutral float-left" title="Contributing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../driver-interfaces/" class="btn btn-neutral float-right" title="Driver Interfaces" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, The HoboVR Labs Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
