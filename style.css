@@ -204,3 +204,24 @@ nav a.selected {
         margin-right: 17%;
     }
 }
+
+.announcement-container {
+    align-items: center;
+    display: flex;
+    background-color:#20232a;
+    color:#fff;
+}
+.announcement {
+    flex: 1 1 auto;
+    padding: 5px 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 40px;
+    padding: 8px 30px;
+}
+.announcement a {
+    display: inline-block;
+    text-decoration: underline;
+    color: #10910e;
+}
