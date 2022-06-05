@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+<meta property="og:title" content="Miscellaneous Development Docs for HoboVR" />
+  
+<meta property="og:type" content="website" />
+  
+<meta property="og:url" content="https://docs.hobovrlabs.org/hobovr_dev_stuff/" />
+  
+<meta property="og:site_name" content="HoboVR Labs Docs" />
+  
+<meta property="og:description" content="I found myself in need to explain the same thing way too many times, so here is a collection of some of those things in a single document, so that hopefully I won’t have to explain the same thing a..." />
+  
+<meta property="og:image" content="https://www.hobovrlabs.org/img/hobovr-logo.png" />
+  
+<meta property="og:image:alt" content="HoboVR Labs Docs" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miscellaneous Development Docs for HoboVR &mdash; HoboVR Labs 0.6.6-stable documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/dark.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Contributing" href="../contribution/" />
+    <link rel="prev" title="Getting Started" href="../getting_started/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> HoboVR Labs
+            <img src="../_static/hobovr-logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.6.6
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference external" href="https://hobovrlabs.org/ukraine.html">🇺🇦 Help Ukraine  🇺🇦</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Miscellaneous Development Docs for HoboVR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-dev-versions-of-our-driver">Installing Dev Versions of Our Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-posers-and-testing-our-drivers">Using Posers and Testing Our Drivers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-posers">Using Posers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing-our-drivers">Testing Our Drivers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#registering-external-drivers">Registering External Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-external-driver-registry">Troubleshooting External Driver Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstalling-external-drivers">Uninstalling External Drivers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#removing-drivers-from-the-external-driver-registry">Removing Drivers From the External Driver Registry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deleting-driver-files">Deleting Driver Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pulling-driver-logs-from-steamvr">Pulling Driver Logs From SteamVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-in-the-living-hell-is-vrpathreg">What in the Living Hell Is <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code>?!</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../openvr/introduction/">An Introduction to Drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../openvr/driver-interfaces/">Driver Interfaces</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">HoboVR Labs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Miscellaneous Development Docs for HoboVR</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/HoboVR-Labs/docs.hobovrlabs.org/blob/master/hobovr_dev_stuff.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="miscellaneous-development-docs-for-hobovr">
+<h1>Miscellaneous Development Docs for HoboVR<a class="headerlink" href="#miscellaneous-development-docs-for-hobovr" title="Permalink to this heading"></a></h1>
+<p>I found myself in need to explain the same thing way too many times, so here is a collection of some of those things in a single document, so that hopefully I won’t have to explain the same thing again…</p>
+<section id="installing-dev-versions-of-our-driver">
+<h2>Installing Dev Versions of Our Driver<a class="headerlink" href="#installing-dev-versions-of-our-driver" title="Permalink to this heading"></a></h2>
+<p>Download the latest driver artifact for your platform from the CI run you want to use.</p>
+<p>Unpack it somewhere in your system and register the unpacked folder as an external driver with SteamVR, either by using the <code class="docutils literal notranslate"><span class="pre">register_driver</span></code> script included with the driver or doing it by hand. See <a class="reference internal" href="#driver-reg"><span class="std std-ref">Using Posers and Testing Our Drivers</span></a>.</p>
+<p>Also I strongly recommend you read the <code class="docutils literal notranslate"><span class="pre">README.md</span></code> file included with the driver.</p>
+<p>After that’s done you need to verify that it’s registered name is matching <code class="docutils literal notranslate"><span class="pre">hobovr</span></code> and registered path is matching the path of the folder you unpacked, this can be done with <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span> <span class="pre">show</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span></code> with the path to the <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code> executable.</p>
+</div>
+<p>For more info see <a class="reference internal" href="#vrpathreg"><span class="std std-ref">What in the Living Hell Is vrpathreg?!</span></a>.</p>
+</section>
+<section id="using-posers-and-testing-our-drivers">
+<span id="driver-reg"></span><h2>Using Posers and Testing Our Drivers<a class="headerlink" href="#using-posers-and-testing-our-drivers" title="Permalink to this heading"></a></h2>
+<section id="using-posers">
+<h3>Using Posers<a class="headerlink" href="#using-posers" title="Permalink to this heading"></a></h3>
+<p>All posers we ship currently need to be started prior to starting SteamVR.</p>
+<p>Also most of our posers are simple executables with command line controls, when you get to a point where the poser is waiting for the driver to connect you can start SteamVR.</p>
+</section>
+<section id="testing-our-drivers">
+<h3>Testing Our Drivers<a class="headerlink" href="#testing-our-drivers" title="Permalink to this heading"></a></h3>
+<p>Test posers can be downloaded from the same CI run you downloaded the driver.</p>
+<p>Test posers are normal posers like any other, except they are not tied to any hardware, just start em’ like any other poser then start SteamVR.
+If everything is working correctly (and if the poser you are testing has an HMD device) you should see a viewport from which you can see the view for both eyes which is a bit distorted and all devices appear green as well as being visible in the viewport.</p>
+</section>
+</section>
+<section id="registering-external-drivers">
+<h2>Registering External Drivers<a class="headerlink" href="#registering-external-drivers" title="Permalink to this heading"></a></h2>
+<p>This applies to every other external driver, not just ours.</p>
+<p>After you have your driver folder somewhere on your system (e.g. <code class="docutils literal notranslate"><span class="pre">/opt/my_kewl_driver/</span></code>) you need to register it, so that SteamVR will try to load it.</p>
+<p>To do that use the <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span> <span class="pre">adddriver</span> <span class="pre">&lt;driver</span> <span class="pre">path&gt;</span></code> command, where you replace <code class="docutils literal notranslate"><span class="pre">&lt;driver</span> <span class="pre">path&gt;</span></code> with the path to the driver folder on your system (e.g. <code class="docutils literal notranslate"><span class="pre">/opt/my_kewl_driver/</span></code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span></code> with the path to the <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code> executable.</p>
+</div>
+<p>For more info see <a class="reference internal" href="#vrpathreg"><span class="std std-ref">What in the Living Hell Is vrpathreg?!</span></a>.</p>
+</section>
+<section id="troubleshooting-external-driver-registry">
+<h2>Troubleshooting External Driver Registry<a class="headerlink" href="#troubleshooting-external-driver-registry" title="Permalink to this heading"></a></h2>
+<p>This is mostly aimed at addressing common faults with our dev driver register scripts (which fails half the time on Windows for no god damn reason), but the in general this also applies to other drivers too.</p>
+<p>Generally there are 3 steps to this</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Check that the path and name match with what your expects using the <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span> <span class="pre">show</span></code> command</p></li>
+<li><p>Make sure there are no null entries, for more info see <a class="reference external" href="https://github.com/ValveSoftware/openvr/issues/1653">OpenVR Issue 1653</a></p></li>
+<li><p>If the previous two steps passed but SteamVR is still not loading your driver it’s time to look at the logs, SteamVR will log the load status of all registered driver paths, including load errors. See <a class="reference internal" href="#steamvr-logs"><span class="std std-ref">Pulling Driver Logs From SteamVR</span></a>.</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="uninstalling-external-drivers">
+<h2>Uninstalling External Drivers<a class="headerlink" href="#uninstalling-external-drivers" title="Permalink to this heading"></a></h2>
+<p>Sometimes one needs to uninstall a driver, be it to install a newer one or because it’s not needed anymore, this generally applies to all external drivers.</p>
+<p>The process itself is split into two parts</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Remove it from the external driver registry</p></li>
+<li><p>Deleting all driver files</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You don’t need to re-register the driver if you are, for example, simply updating the dev version of our driver with a newer build, just replace the files in the driver folder, no further setup required.</p>
+</div>
+<section id="removing-drivers-from-the-external-driver-registry">
+<h3>Removing Drivers From the External Driver Registry<a class="headerlink" href="#removing-drivers-from-the-external-driver-registry" title="Permalink to this heading"></a></h3>
+<p>To do this you need to use <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code>’s <code class="docutils literal notranslate"><span class="pre">removedriver</span></code> command or <code class="docutils literal notranslate"><span class="pre">removedriverwithname</span></code> if you wish to remove it by name,
+if you are not sure you can always double check by looking for the driver you wish to remove in the list of all external drivers acquired with the <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span> <span class="pre">show</span></code> command.</p>
+<p>For example you have a driver installed with this path in the registry <code class="docutils literal notranslate"><span class="pre">/opt/my_kewl_driver</span></code> and named <code class="docutils literal notranslate"><span class="pre">my_kewl_driver</span></code>.
+Now to remove this driver from the registry by name you need to execute this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; removedriverwithname my_kewl_driver
+</pre></div>
+</div>
+<p>And if you want to remove it by using the registered path you need to execute this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; removedriver <span class="s2">&quot;/opt/my_kewl_driver&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span></code> with the path to the <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code> executable.</p>
+</div>
+<p>For more info see <a class="reference internal" href="#vrpathreg"><span class="std std-ref">What in the Living Hell Is vrpathreg?!</span></a>.</p>
+</section>
+<section id="deleting-driver-files">
+<h3>Deleting Driver Files<a class="headerlink" href="#deleting-driver-files" title="Permalink to this heading"></a></h3>
+<p>Before you do this you need to make sure the driver folder(s) are no longer registered, so that SteamVR will not try to load them after you deleted them, you can do that by using the <code class="docutils literal notranslate"><span class="pre">show</span></code> command from <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code>.</p>
+<p>Actually deleting them is pretty straight forward, just delete the driver folder, in case of the driver in <code class="docutils literal notranslate"><span class="pre">/opt/my_kewl_driver</span></code> from the previous example you just need to delete the <code class="docutils literal notranslate"><span class="pre">/opt/my_kewl_driver/</span></code> folder.</p>
+</section>
+</section>
+<section id="pulling-driver-logs-from-steamvr">
+<span id="steamvr-logs"></span><h2>Pulling Driver Logs From SteamVR<a class="headerlink" href="#pulling-driver-logs-from-steamvr" title="Permalink to this heading"></a></h2>
+<p>SteamVR stores driver logs in <code class="docutils literal notranslate"><span class="pre">&lt;steam</span> <span class="pre">install</span> <span class="pre">path&gt;/logs/vrserver.txt</span></code>, but all logs are also accessible from the developer’s web console live, while SteamVR is running.</p>
+</section>
+<section id="what-in-the-living-hell-is-vrpathreg">
+<span id="vrpathreg"></span><h2>What in the Living Hell Is <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code>?!<a class="headerlink" href="#what-in-the-living-hell-is-vrpathreg" title="Permalink to this heading"></a></h2>
+<p>It’s a registry tool. SteamVR registry tool to be exact, it allows you to change paths to some core components of the SteamVR system as well as register/unregister external drivers.</p>
+<p>To use it you’ll have to open your terminal of choice in <code class="docutils literal notranslate"><span class="pre">&lt;SteamVR</span> <span class="pre">install</span> <span class="pre">path&gt;/bin/</span></code> and here is where the usage differs from Windows to Linux a bit… You see on windows it’s an exe file in <code class="docutils literal notranslate"><span class="pre">&lt;SteamVR</span> <span class="pre">install</span> <span class="pre">path&gt;/bin/win32/</span></code> and on Linux it a bash script in <code class="docutils literal notranslate"><span class="pre">&lt;SteamVR</span> <span class="pre">install</span> <span class="pre">path&gt;/bin/</span></code> wrapper around the binary executable to setup the environment for it to work properly.</p>
+<p>So whenever you see <code class="docutils literal notranslate"><span class="pre">&lt;vrpathreg&gt;</span></code> replace it with the path to the executable thing for your platform, the arguments stay the same (and if any of the paths have spaces in them put them in double quotes).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; <span class="nb">help</span>
+Commands:
+        show - Display the current paths
+        setruntime &lt;path&gt; - Sets the runtime path
+        setthis - Sets the runtime path to the runtime that vrpathreg lives <span class="k">in</span>
+        setconfig &lt;path&gt; - Sets the config path
+        setlog &lt;path&gt; - Sets the log path
+        adddriver &lt;path&gt; - Adds an external driver
+        removedriver &lt;path&gt; - Removes an external driver
+        removedriverswithname &lt;name&gt; - Removes all external drivers with a given name
+        finddriver &lt;name&gt; - Tries to find a driver by name
+
+        Return Code:
+        <span class="m">0</span> : Success
+        <span class="m">1</span> : <span class="o">(</span> finddriver only <span class="o">)</span> Driver not present
+        <span class="m">2</span> : <span class="o">(</span> finddriver only <span class="o">)</span> Error, driver installed more than once
+        -1 : Configuration or permission problem
+        -2 : Argument problem
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Return codes are fetched differently on Windows and Linux.</p>
+<p>On Linux it’s as simple as running <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">$?</span></code> after the command.</p>
+<p>And on Windows to see the return code of the last command you need to run <code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">%errorlevel%</span></code>.</p>
+</div>
+<p>Your go to commands for driver development are <code class="docutils literal notranslate"><span class="pre">adddriver</span></code>, <code class="docutils literal notranslate"><span class="pre">removedriver</span></code> and <code class="docutils literal notranslate"><span class="pre">show</span></code>, but not so long ago <code class="docutils literal notranslate"><span class="pre">removedriverswithname</span></code> and <code class="docutils literal notranslate"><span class="pre">finddriver</span></code> have been added.</p>
+<p><code class="docutils literal notranslate"><span class="pre">show</span></code> takes no arguments, displays the current registry, example (Linux):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; show
+Runtime <span class="nv">path</span> <span class="o">=</span> /home/&lt;user&gt;/.local/share/Steam/steamapps/common/SteamVR
+Config <span class="nv">path</span> <span class="o">=</span> /home/&lt;user&gt;/.local/share/Steam/config
+Log <span class="nv">path</span> <span class="o">=</span> /home/&lt;user&gt;/.local/share/Steam/logs
+External Drivers:
+        hobovr : /home/&lt;user&gt;/Documents/hobo_vr/hobovr/
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">adddriver</span></code> takes a driver folder path as the first argument, it registers a driver folder for SteamVR, but be careful to not register a null path, see <a class="reference external" href="https://github.com/ValveSoftware/openvr/issues/1653">OpenVR Issue 1653</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; adddriver &lt;driver folder path&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">removedriver</span></code> takes a driver folder path as the first argument, it unregisteres a driver folder for SteamVR.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; removedriver &lt;driver folder path&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">removedriverswithname</span></code> takes a driver name as the first argument, it unregisteres the driver with a matching name.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; removedriverswithname &lt;driver name&gt;
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">finddriver</span></code> takes a driver name as the first argument, outputs the path for the driver matching the input name, outputs an empty line if there is no matching driver.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;vrpathreg&gt; finddriver &lt;driver name&gt;
+</pre></div>
+</div>
+<p>Now, the rest of the commands are useful only for messing with SteamVR itself, i don’t recommend you ever try this, but here is a short description of what these commands do:</p>
+<p><code class="docutils literal notranslate"><span class="pre">setruntime</span> <span class="pre">&lt;path&gt;</span></code> sets the SteamVR runtime path, by default it’s <code class="docutils literal notranslate"><span class="pre">&lt;steam</span> <span class="pre">install</span> <span class="pre">path&gt;/steamapps/common/SteamVR</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">setconfig</span> <span class="pre">&lt;path&gt;</span></code> sets the SteamVR’s config path, by default it’s <code class="docutils literal notranslate"><span class="pre">&lt;steam</span> <span class="pre">install</span> <span class="pre">path&gt;/config</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">setlog</span> <span class="pre">&lt;path&gt;</span></code> sets the path where SteamVR bumps logs, by default it’s <code class="docutils literal notranslate"><span class="pre">&lt;steam</span> <span class="pre">install</span> <span class="pre">path&gt;/logs</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">setthis</span></code> no idea what it does, never seen it used</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../getting_started/" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contribution/" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, The HoboVR Labs Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

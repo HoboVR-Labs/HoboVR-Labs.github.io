@@ -30,11 +30,12 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex/" />
     <link rel="search" title="Search" href="../search/" />
-    <link rel="next" title="Contributing" href="../contribution/" />
+    <link rel="next" title="Miscellaneous Development Docs for HoboVR" href="../hobovr_dev_stuff/" />
     <link rel="prev" title="HoboVR Labs documentation!" href="../" /> 
 </head>
 
@@ -81,6 +82,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../hobovr_dev_stuff/">Miscellaneous Development Docs for HoboVR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribution/">Contributing</a></li>
 </ul>
 <ul>
@@ -113,10 +115,10 @@
            <div itemprop="articleBody">
              
   <section id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
 <p>To get started with <code class="docutils literal notranslate"><span class="pre">hobo_vr</span></code> you need two things: our driver and a poser.</p>
 <section id="installing-the-driver">
-<h2>Installing The Driver<a class="headerlink" href="#installing-the-driver" title="Permalink to this headline"></a></h2>
+<h2>Installing The Driver<a class="headerlink" href="#installing-the-driver" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You need Steam and SteamVR installed to use our driver</p>
@@ -124,7 +126,7 @@
 <p>You can download our installers from <a class="reference external" href="https://github.com/HoboVR-Labs/hobo_vr/releases">here</a>.</p>
 </section>
 <section id="building-driver-from-source">
-<h2>Building Driver From Source<a class="headerlink" href="#building-driver-from-source" title="Permalink to this headline"></a></h2>
+<h2>Building Driver From Source<a class="headerlink" href="#building-driver-from-source" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>We assume you are familiar with command line/terminal, and able to run basic commands.</p>
@@ -143,7 +145,7 @@
 </pre></div>
 </div>
 <section id="building-on-linux">
-<h3>Building on Linux<a class="headerlink" href="#building-on-linux" title="Permalink to this headline"></a></h3>
+<h3>Building on Linux<a class="headerlink" href="#building-on-linux" title="Permalink to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">-DINSTALL_X86_DRIVER=1</span></code> argument is not optional for 32bit builds, if it is not added you risk installing a 32bit driver into a 64bit target!</p>
@@ -166,7 +168,7 @@
 <p>See <a class="reference internal" href="../openvr/introduction/#opevr-driver-directories"><span class="std std-ref">Driver Directory</span></a>.</p>
 </section>
 <section id="building-on-windows">
-<h3>Building on Windows<a class="headerlink" href="#building-on-windows" title="Permalink to this headline"></a></h3>
+<h3>Building on Windows<a class="headerlink" href="#building-on-windows" title="Permalink to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">-DINSTALL_X86_DRIVER=1</span></code> argument is not optional for 32bit builds, if it is not added you risk installing a 32bit driver into a 64bit target!</p>
@@ -190,7 +192,7 @@
 <p>See <a class="reference external" href="#">Openvr Driver Folders</a>.</p>
 </section>
 <section id="installing-your-build">
-<h3>Installing Your Build<a class="headerlink" href="#installing-your-build" title="Permalink to this headline"></a></h3>
+<h3>Installing Your Build<a class="headerlink" href="#installing-your-build" title="Permalink to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You only need to install your driver build once, unless you move your install directory.</p>
@@ -217,10 +219,10 @@
 </section>
 </section>
 <section id="what-is-a-poser">
-<h2>What Is a Poser<a class="headerlink" href="#what-is-a-poser" title="Permalink to this headline"></a></h2>
+<h2>What Is a Poser<a class="headerlink" href="#what-is-a-poser" title="Permalink to this heading"></a></h2>
 <p>A poser is what we call a process that controls our driver. On its own our driver will not do anything, hell it won’t even start if a poser process is not running.</p>
 <section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h3>
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h3>
 <p>You can find poser examples for Python and C++ on <a class="reference external" href="https://github.com/HoboVR-Labs/hobo_vr/tree/master/bindings">our GitHub repository</a>.</p>
 <p>But here is a simple example for Python:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">struct</span>
@@ -345,17 +347,17 @@
 </div>
 </section>
 <section id="how-it-works">
-<h3>How It Works<a class="headerlink" href="#how-it-works" title="Permalink to this headline"></a></h3>
+<h3>How It Works<a class="headerlink" href="#how-it-works" title="Permalink to this heading"></a></h3>
 <p>For a process to be acknowledged as a poser by our driver, it needs to bind and listen  on <code class="docutils literal notranslate"><span class="pre">tcp://127.0.0.1:6969</span></code>, and then accept 2 sockets. The two sockets will identify themselves with <code class="docutils literal notranslate"><span class="pre">&quot;hello\n&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;monky\n&quot;</span></code> as the first message sent after establishing a connection.</p>
 <p>The socket that sent <code class="docutils literal notranslate"><span class="pre">&quot;monky\n&quot;</span></code> is used as a general driver control channel, we call it the manager channel though. This socket allows for changing the device live list, changing some device settings, etc. See <a class="reference internal" href="#manager-protocol">Manager Protocol</a>.</p>
 <p>The socket that sent <code class="docutils literal notranslate"><span class="pre">&quot;hello\n&quot;</span></code> is used as a device control channel, we call it tracking channel though. This socket is meant for controlling the live device list, mostly through tracking. See <a class="reference internal" href="#tracking-protocol">Tracking Protocol</a>.</p>
 </section>
 </section>
 <section id="poser-protocols">
-<h2>Poser Protocols<a class="headerlink" href="#poser-protocols" title="Permalink to this headline"></a></h2>
+<h2>Poser Protocols<a class="headerlink" href="#poser-protocols" title="Permalink to this heading"></a></h2>
 <p>When sending messages, the poser process has to fill the <code class="docutils literal notranslate"><span class="pre">terminator[3]</span></code> field with <code class="docutils literal notranslate"><span class="pre">&quot;\t\r\n&quot;</span></code>.</p>
 <section id="manager-protocol">
-<h3>Manager Protocol<a class="headerlink" href="#manager-protocol" title="Permalink to this headline"></a></h3>
+<h3>Manager Protocol<a class="headerlink" href="#manager-protocol" title="Permalink to this heading"></a></h3>
 <p>Current manager protocol consists of the following structs:</p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="c1">// manager command type</span>
 <span class="k">enum</span><span class="w"> </span><span class="n">HobovrManagerMsgType</span><span class="w"></span>
@@ -446,7 +448,7 @@
 <p>Any of them can be sent using the manager socket.</p>
 </section>
 <section id="tracking-protocol">
-<h3>Tracking Protocol<a class="headerlink" href="#tracking-protocol" title="Permalink to this headline"></a></h3>
+<h3>Tracking Protocol<a class="headerlink" href="#tracking-protocol" title="Permalink to this heading"></a></h3>
 <p>The tracking protocol is, unfortunately, not as simple as the manager protocol. Depending on the current driver device list, the message structure will change. Here are some examples (device structs are explained later):</p>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="c1">// Driver device list in this example will be(in that order): hmd, controller_right, controller_left</span>
 
@@ -510,7 +512,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../" class="btn btn-neutral float-left" title="HoboVR Labs documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../contribution/" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../hobovr_dev_stuff/" class="btn btn-neutral float-right" title="Miscellaneous Development Docs for HoboVR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

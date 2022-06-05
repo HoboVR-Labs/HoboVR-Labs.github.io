@@ -11,7 +11,7 @@
   
 <meta property="og:site_name" content="HoboVR Labs Docs" />
   
-<meta property="og:description" content="WIP VRProperties Interface: WIP VRInput Interface: WIP IVRDriverLog Interface: WIP ITrackedDeviceServerDriver Device Interface: WIP Components: WIP IServerTrackedDeviceProvider Driver Interface: WI..." />
+<meta property="og:description" content="This is an incomplete unofficial document describing driver interfaces present in OpenVR. IVRProperties Interface: WIP IVRSettings Interface: Current version: IVRSettings_003 Allows the user to fet..." />
   
 <meta property="og:image" content="https://www.hobovrlabs.org/img/hobovr-logo.png" />
   
@@ -30,6 +30,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex/" />
@@ -61,12 +62,14 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hobovr_dev_stuff/">Miscellaneous Development Docs for HoboVR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contribution/">Contributing</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction/">An Introduction to Drivers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Driver Interfaces</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#vrproperties-interface">VRProperties Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ivrproperties-interface">IVRProperties Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ivrsettings-interface">IVRSettings Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#vrinput-interface">VRInput Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ivrdriverlog-interface">IVRDriverLog Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#itrackeddeviceserverdriver-device-interface">ITrackedDeviceServerDriver Device Interface</a></li>
@@ -103,38 +106,102 @@
            <div itemprop="articleBody">
              
   <section id="driver-interfaces">
-<span id="id1"></span><h1>Driver Interfaces<a class="headerlink" href="#driver-interfaces" title="Permalink to this headline"></a></h1>
-<p>WIP</p>
-<section id="vrproperties-interface">
-<span id="id2"></span><h2>VRProperties Interface<a class="headerlink" href="#vrproperties-interface" title="Permalink to this headline"></a></h2>
+<span id="id1"></span><h1>Driver Interfaces<a class="headerlink" href="#driver-interfaces" title="Permalink to this heading"></a></h1>
+<p>This is an incomplete unofficial document describing driver interfaces present in OpenVR.</p>
+<section id="ivrproperties-interface">
+<span id="vrproperties-interface"></span><h2>IVRProperties Interface<a class="headerlink" href="#ivrproperties-interface" title="Permalink to this heading"></a></h2>
 <p>WIP</p>
 </section>
+<section id="ivrsettings-interface">
+<h2>IVRSettings Interface<a class="headerlink" href="#ivrsettings-interface" title="Permalink to this heading"></a></h2>
+<p>Current version: <code class="docutils literal notranslate"><span class="pre">IVRSettings_003</span></code></p>
+<p>Allows the user to fetch, write (and also remove keys or entire sections) the last overridden value of a specific key from a specific section.
+The values can be overridden by any <code class="docutils literal notranslate"><span class="pre">*.vrsettings</span></code> file (which is picked up by either SteamVR, like <code class="docutils literal notranslate"><span class="pre">&lt;steam</span> <span class="pre">install</span> <span class="pre">path&gt;/configs/steamvr.vrsettings</span></code> or your driver using the <code class="docutils literal notranslate"><span class="pre">Prop_AdditionalDeviceSettingsPath_String</span></code> prop) with a matching section &amp; key pair.</p>
+<p>Example usage:</p>
+<p>You’re writing a driver and you need to have some sort of configuration/persistence.
+Your needs can be easily satisfied with <code class="docutils literal notranslate"><span class="pre">IVRSettings</span></code>. First create a file called <code class="docutils literal notranslate"><span class="pre">default.vrsettings</span></code> and place it in <code class="docutils literal notranslate"><span class="pre">&lt;your</span> <span class="pre">driver</span> <span class="pre">dir&gt;/resources/settings/</span></code>, then put your default configuration inside this file, using json syntax and the following scheme:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nt">&quot;my_very_own_driver_section&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;my_very_usefull_key_float&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;my_very_usefull_key_int&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;my_very_usefull_key_bool&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nt">&quot;my_very_usefull_key_str&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;blah blah blah text here blah blah blah&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Then in your driver you can access the values for your section &amp; key pairs (and other section &amp; key pairs) by using the <code class="docutils literal notranslate"><span class="pre">IVRSettings</span></code> interface:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">float</span><span class="w"> </span><span class="n">fVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFloat</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_very_usefull_key_float&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int32_t</span><span class="w"> </span><span class="n">iVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetInt32</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_very_usefull_key_int&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">bVal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetBool</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_very_usefull_key_bool&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">char</span><span class="w"> </span><span class="n">buff</span><span class="p">[</span><span class="mi">255</span><span class="p">];</span><span class="w"></span>
+<span class="n">memset</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buff</span><span class="p">));</span><span class="w"></span>
+<span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetString</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;my_very_usefull_key_str&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">buff</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buff</span><span class="p">)</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">sVal</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buff</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+<p>You can also write to section &amp; key pairs, but be aware that if you write to a section &amp; key pair that never existed before, it’ll get create, except in <code class="docutils literal notranslate"><span class="pre">&lt;steam</span> <span class="pre">install</span> <span class="pre">path&gt;/config/steamvr.vrsettings</span></code> instead:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetFloat</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_very_usefull_key_float&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.5</span><span class="p">);</span><span class="w"></span>
+<span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetInt32</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_very_usefull_key_int&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">420</span><span class="p">);</span><span class="w"></span>
+<span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetBool</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_very_usefull_key_bool&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span><span class="w"></span>
+<span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetString</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;my_very_usefull_key_str&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;new very kewl text mmmmmmmmmmm yes&quot;</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+<span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">SetInt32</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_key_that_didnt_exist_int&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">420</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>You can also remove sections or keys in a sections, but be extra careful not to remove a section or key that is used by a different driver.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// this will only remove this specific key from this section</span>
+<span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">RemoveKeyInSection</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;my_key_that_didnt_exist_int&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// this will remove all keys in the section and delete the section itself</span>
+<span class="n">vr</span><span class="o">::</span><span class="n">VRSettings</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">RemoveSection</span><span class="p">(</span><span class="s">&quot;my_very_own_driver_section&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Optionally you can also pass a pointer to <code class="docutils literal notranslate"><span class="pre">vr::EVRSettingsError</span></code> as the last argument to capture the error, for how to process those refer to the <code class="docutils literal notranslate"><span class="pre">vr::EVRSettingsError</span></code> enum.</p>
+</section>
 <section id="vrinput-interface">
-<h2>VRInput Interface<a class="headerlink" href="#vrinput-interface" title="Permalink to this headline"></a></h2>
+<h2>VRInput Interface<a class="headerlink" href="#vrinput-interface" title="Permalink to this heading"></a></h2>
 <p>WIP</p>
 </section>
 <section id="ivrdriverlog-interface">
-<h2>IVRDriverLog Interface<a class="headerlink" href="#ivrdriverlog-interface" title="Permalink to this headline"></a></h2>
-<p>WIP</p>
+<h2>IVRDriverLog Interface<a class="headerlink" href="#ivrdriverlog-interface" title="Permalink to this heading"></a></h2>
+<p>Current version: <code class="docutils literal notranslate"><span class="pre">IVRDriverLog_001</span></code></p>
+<p>A pretty straightforward interface allowing you to log something in SteamVR’s log.
+The logs will appear in the developer web console as well as in <code class="docutils literal notranslate"><span class="pre">&lt;steam</span> <span class="pre">install</span> <span class="pre">path&gt;/logs/vrserver.txt</span></code>.</p>
+<p>Example usage:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">VRDriverLog</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;my very cool log&quot;</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This is the only method it has and it accepts a null terminated string, we recommend you write your own wrapped around it to allow formatting.</p>
 </section>
 <section id="itrackeddeviceserverdriver-device-interface">
-<h2>ITrackedDeviceServerDriver Device Interface<a class="headerlink" href="#itrackeddeviceserverdriver-device-interface" title="Permalink to this headline"></a></h2>
+<h2>ITrackedDeviceServerDriver Device Interface<a class="headerlink" href="#itrackeddeviceserverdriver-device-interface" title="Permalink to this heading"></a></h2>
 <p>WIP</p>
 </section>
 <section id="components">
-<h2>Components<a class="headerlink" href="#components" title="Permalink to this headline"></a></h2>
+<h2>Components<a class="headerlink" href="#components" title="Permalink to this heading"></a></h2>
 <p>WIP</p>
 </section>
 <section id="iservertrackeddeviceprovider-driver-interface">
-<h2>IServerTrackedDeviceProvider Driver Interface<a class="headerlink" href="#iservertrackeddeviceprovider-driver-interface" title="Permalink to this headline"></a></h2>
+<h2>IServerTrackedDeviceProvider Driver Interface<a class="headerlink" href="#iservertrackeddeviceprovider-driver-interface" title="Permalink to this heading"></a></h2>
 <p>WIP</p>
 </section>
 <section id="ivrwatchdogprovider-driver-interface">
-<h2>IVRWatchdogProvider Driver Interface<a class="headerlink" href="#ivrwatchdogprovider-driver-interface" title="Permalink to this headline"></a></h2>
+<h2>IVRWatchdogProvider Driver Interface<a class="headerlink" href="#ivrwatchdogprovider-driver-interface" title="Permalink to this heading"></a></h2>
 <p>WIP</p>
 </section>
 <section id="ivrcompositorpluginprovider-driver-interface">
-<h2>IVRCompositorPluginProvider Driver Interface<a class="headerlink" href="#ivrcompositorpluginprovider-driver-interface" title="Permalink to this headline"></a></h2>
+<h2>IVRCompositorPluginProvider Driver Interface<a class="headerlink" href="#ivrcompositorpluginprovider-driver-interface" title="Permalink to this heading"></a></h2>
 <p>WIP</p>
 </section>
 </section>

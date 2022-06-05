@@ -11,7 +11,7 @@
   
 <meta property="og:site_name" content="HoboVR Labs Docs" />
   
-<meta property="og:description" content="Help Provide Humanitarian Aid to Ukraine: 🇺🇦 Help Ukraine 🇺🇦. Overview: Getting Started- Installing The Driver, Building Driver From Source, What Is a Poser, Poser Protocols., Contributing- How to ..." />
+<meta property="og:description" content="Help Provide Humanitarian Aid to Ukraine: 🇺🇦 Help Ukraine 🇺🇦. Overview: Getting Started- Installing The Driver, Building Driver From Source, What Is a Poser, Poser Protocols., Miscellaneous Develop..." />
   
 <meta property="og:image" content="https://www.hobovrlabs.org/img/hobovr-logo.png" />
   
@@ -30,6 +30,7 @@
         <script data-url_root="#" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex/" />
@@ -61,6 +62,7 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started/">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hobovr_dev_stuff/">Miscellaneous Development Docs for HoboVR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contribution/">Contributing</a></li>
 </ul>
 <ul>
@@ -93,10 +95,10 @@
            <div itemprop="articleBody">
              
   <section id="hobovr-labs-documentation">
-<h1>HoboVR Labs documentation!<a class="headerlink" href="#hobovr-labs-documentation" title="Permalink to this headline"></a></h1>
+<h1>HoboVR Labs documentation!<a class="headerlink" href="#hobovr-labs-documentation" title="Permalink to this heading"></a></h1>
 </section>
 <section id="help-provide-humanitarian-aid-to-ukraine">
-<h1>Help Provide Humanitarian Aid to Ukraine<a class="headerlink" href="#help-provide-humanitarian-aid-to-ukraine" title="Permalink to this headline"></a></h1>
+<h1>Help Provide Humanitarian Aid to Ukraine<a class="headerlink" href="#help-provide-humanitarian-aid-to-ukraine" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference external" href="https://hobovrlabs.org/ukraine.html">🇺🇦 Help Ukraine  🇺🇦</a></li>
@@ -104,7 +106,7 @@
 </div>
 </section>
 <section id="overview">
-<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h1>
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started/">Getting Started</a><ul>
@@ -112,6 +114,16 @@
 <li class="toctree-l2"><a class="reference internal" href="getting_started/#building-driver-from-source">Building Driver From Source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/#what-is-a-poser">What Is a Poser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/#poser-protocols">Poser Protocols</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hobovr_dev_stuff/">Miscellaneous Development Docs for HoboVR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hobovr_dev_stuff/#installing-dev-versions-of-our-driver">Installing Dev Versions of Our Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hobovr_dev_stuff/#using-posers-and-testing-our-drivers">Using Posers and Testing Our Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hobovr_dev_stuff/#registering-external-drivers">Registering External Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hobovr_dev_stuff/#troubleshooting-external-driver-registry">Troubleshooting External Driver Registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hobovr_dev_stuff/#uninstalling-external-drivers">Uninstalling External Drivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hobovr_dev_stuff/#pulling-driver-logs-from-steamvr">Pulling Driver Logs From SteamVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hobovr_dev_stuff/#what-in-the-living-hell-is-vrpathreg">What in the Living Hell Is <code class="docutils literal notranslate"><span class="pre">vrpathreg</span></code>?!</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contribution/">Contributing</a><ul>
@@ -126,7 +138,7 @@
 </div>
 </section>
 <section id="unofficial-openvr-driver-api-documentation">
-<h1>Unofficial OpenVR Driver API Documentation<a class="headerlink" href="#unofficial-openvr-driver-api-documentation" title="Permalink to this headline"></a></h1>
+<h1>Unofficial OpenVR Driver API Documentation<a class="headerlink" href="#unofficial-openvr-driver-api-documentation" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="openvr/introduction/">An Introduction to Drivers</a><ul>
@@ -138,7 +150,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="openvr/driver-interfaces/">Driver Interfaces</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="openvr/driver-interfaces/#vrproperties-interface">VRProperties Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openvr/driver-interfaces/#ivrproperties-interface">IVRProperties Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openvr/driver-interfaces/#ivrsettings-interface">IVRSettings Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="openvr/driver-interfaces/#vrinput-interface">VRInput Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="openvr/driver-interfaces/#ivrdriverlog-interface">IVRDriverLog Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="openvr/driver-interfaces/#itrackeddeviceserverdriver-device-interface">ITrackedDeviceServerDriver Device Interface</a></li>

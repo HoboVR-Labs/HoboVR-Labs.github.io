@@ -30,6 +30,7 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex/" />
@@ -62,6 +63,7 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hobovr_dev_stuff/">Miscellaneous Development Docs for HoboVR</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../contribution/">Contributing</a></li>
 </ul>
 <ul class="current">
@@ -113,10 +115,10 @@
            <div itemprop="articleBody">
              
   <section id="an-introduction-to-drivers">
-<h1>An Introduction to Drivers<a class="headerlink" href="#an-introduction-to-drivers" title="Permalink to this headline"></a></h1>
+<h1>An Introduction to Drivers<a class="headerlink" href="#an-introduction-to-drivers" title="Permalink to this heading"></a></h1>
 <p>SteamVR uses dynamic libraries to load drivers, and as it turns out, all that a dynamic library needs to do to be recognized as a driver, is export <em>a single function</em> <code class="docutils literal notranslate"><span class="pre">void*</span> <span class="pre">HmdDriverFactory(const</span> <span class="pre">char</span> <span class="pre">*pInterfaceName,</span> <span class="pre">int</span> <span class="pre">*pReturnCode)</span></code>… <em>And</em> have a nice driver directory and be built for both 32 and 64 bit instructions <em>AND</em> use very specific interfaces in the driver ABI… In short, its a mess. But it doesn’t have to be, hopefully this page helps with that.</p>
 <section id="driver-directory">
-<span id="opevr-driver-directories"></span><h2>Driver Directory<a class="headerlink" href="#driver-directory" title="Permalink to this headline"></a></h2>
+<span id="opevr-driver-directories"></span><h2>Driver Directory<a class="headerlink" href="#driver-directory" title="Permalink to this heading"></a></h2>
 <p>Driver directories have only 1 mandatory component: a <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code> file, which describes how the contents of the driver directory will be used. See <a class="reference internal" href="#driver-manifest-file">Driver Manifest File</a>.</p>
 <p>Everything else is technically optional, but you won’t have a driver otherwise so yeah.</p>
 <p>Driver directories can be either a “resource only” driver, or a fully fledged driver. That is specified in the <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code> file using the <code class="docutils literal notranslate"><span class="pre">&quot;resourceOnly&quot;</span></code> bool field. See <a class="reference internal" href="#driver-resources">Driver Resources</a>.</p>
@@ -236,7 +238,7 @@ hobovr/
 </div>
 </section>
 <section id="driver-manifest-file">
-<h2>Driver Manifest File<a class="headerlink" href="#driver-manifest-file" title="Permalink to this headline"></a></h2>
+<h2>Driver Manifest File<a class="headerlink" href="#driver-manifest-file" title="Permalink to this heading"></a></h2>
 <p>This file determines how the driver will be recognized by SteamVR. It needs to be placed in the root of your driver directory and have this name: <code class="docutils literal notranslate"><span class="pre">driver.vrdrivermanifest</span></code>.</p>
 <p>The contents of this file need to look like this:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
@@ -266,9 +268,9 @@ hobovr/
 </div></blockquote>
 </section>
 <section id="driver-resources">
-<h2>Driver Resources<a class="headerlink" href="#driver-resources" title="Permalink to this headline"></a></h2>
+<h2>Driver Resources<a class="headerlink" href="#driver-resources" title="Permalink to this heading"></a></h2>
 <section id="status-icons">
-<h3>Status Icons<a class="headerlink" href="#status-icons" title="Permalink to this headline"></a></h3>
+<h3>Status Icons<a class="headerlink" href="#status-icons" title="Permalink to this heading"></a></h3>
 <p>First lets talk about something easy and nice, device status icons. If you ever bothered to read the code comments in the official <a class="reference external" href="https://github.com/ValveSoftware/openvr/blob/master/samples/driver_sample/driver_sample.cpp#L208">driver sample</a>, you’d find a rather interesting section that mentions how to configure device status icons outside of driver code using a <code class="docutils literal notranslate"><span class="pre">driver.vrresources</span></code> file.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Icons can be configured in code or automatically configured by an external file &quot;drivername\resources\driver.vrresources&quot;.</span>
 <span class="c1">// Icon properties NOT configured in code (post Activate) are then auto-configured by the optional presence of a driver&#39;s &quot;drivername\resources\driver.vrresources&quot;.</span>
@@ -407,11 +409,11 @@ indexhmd/resources/icons/
 </div>
 </section>
 <section id="input-profiles">
-<h3>Input Profiles<a class="headerlink" href="#input-profiles" title="Permalink to this headline"></a></h3>
+<h3>Input Profiles<a class="headerlink" href="#input-profiles" title="Permalink to this heading"></a></h3>
 <p>Json with a lot of hate (WIP)</p>
 </section>
 <section id="localization">
-<h3>Localization<a class="headerlink" href="#localization" title="Permalink to this headline"></a></h3>
+<h3>Localization<a class="headerlink" href="#localization" title="Permalink to this heading"></a></h3>
 <p>WIP</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -420,15 +422,15 @@ indexhmd/resources/icons/
 </div>
 </section>
 <section id="render-models">
-<h3>Render Models<a class="headerlink" href="#render-models" title="Permalink to this headline"></a></h3>
+<h3>Render Models<a class="headerlink" href="#render-models" title="Permalink to this heading"></a></h3>
 <p>Obj models with a hint of json hate (WIP)</p>
 </section>
 <section id="firmware">
-<h3>Firmware<a class="headerlink" href="#firmware" title="Permalink to this headline"></a></h3>
-<p>Its not in any examples, it is mentioned a lot in the <code class="docutils literal notranslate"><span class="pre">openvr_driver.h</span></code> header though. You might be able to use the “automatic™ SteamVR™ firmware™ updater™ tool™ thingymajig™®©℠℗” using the combination of <code class="docutils literal notranslate"><span class="pre">VREvent_FirmwareUpdateStarted</span></code> and <code class="docutils literal notranslate"><span class="pre">VREvent_FirmwareUpdateFinished</span></code> events together with <code class="docutils literal notranslate"><span class="pre">EVRFirmwareError</span></code> enum, firmware related props and files in <code class="docutils literal notranslate"><span class="pre">{driver</span> <span class="pre">name}/firmware/</span></code>. We don’t really now the specific on how to use the “automatic™ SteamVR™ firmware™ updater™ tool™ thingymajig™®©℠℗”. What we do know is how to trigger the manual firmware update notification for the user which will redirect the user to a url from <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_ManualUpdateURL_String</span></code>. Well how do you do that then? Simple just set <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_UpdateAvailable_Bool</span></code> and <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_ManualUpdate_Bool</span></code> to true using the <code class="docutils literal notranslate"><span class="pre">VRProperties</span></code> interface. See <a class="reference internal" href="../driver-interfaces/#vrproperties-interface"><span class="std std-ref">VRProperties Interface</span></a>.</p>
+<h3>Firmware<a class="headerlink" href="#firmware" title="Permalink to this heading"></a></h3>
+<p>Its not in any examples, it is mentioned a lot in the <code class="docutils literal notranslate"><span class="pre">openvr_driver.h</span></code> header though. You might be able to use the “automatic™ SteamVR™ firmware™ updater™ tool™ thingymajig™®©℠℗” using the combination of <code class="docutils literal notranslate"><span class="pre">VREvent_FirmwareUpdateStarted</span></code> and <code class="docutils literal notranslate"><span class="pre">VREvent_FirmwareUpdateFinished</span></code> events together with <code class="docutils literal notranslate"><span class="pre">EVRFirmwareError</span></code> enum, firmware related props and files in <code class="docutils literal notranslate"><span class="pre">{driver</span> <span class="pre">name}/firmware/</span></code>. We don’t really now the specific on how to use the “automatic™ SteamVR™ firmware™ updater™ tool™ thingymajig™®©℠℗”. What we do know is how to trigger the manual firmware update notification for the user which will redirect the user to a url from <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_ManualUpdateURL_String</span></code>. Well how do you do that then? Simple just set <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_UpdateAvailable_Bool</span></code> and <code class="docutils literal notranslate"><span class="pre">Prop_Firmware_ManualUpdate_Bool</span></code> to true using the <code class="docutils literal notranslate"><span class="pre">VRProperties</span></code> interface. See <a class="reference internal" href="../driver-interfaces/#vrproperties-interface"><span class="std std-ref">IVRProperties Interface</span></a>.</p>
 </section>
 <section id="animations">
-<h3>Animations<a class="headerlink" href="#animations" title="Permalink to this headline"></a></h3>
+<h3>Animations<a class="headerlink" href="#animations" title="Permalink to this heading"></a></h3>
 <p>I got nothing for you yet again x)</p>
 <p>The only thing I know about it, is that Index and Oculus controller drivers use them. Animations can be found in <code class="docutils literal notranslate"><span class="pre">{driver</span> <span class="pre">name}/anims/</span></code>. Why are they there? What are they used for? How do <em>you</em> use it in <em>your</em> driver? And the answers to those are: No idea. No clue. And I wish I knew.</p>
 <p>This is not mentioned in any examples, hell there is no mention of the word <code class="docutils literal notranslate"><span class="pre">anim</span></code> in <code class="docutils literal notranslate"><span class="pre">openvr_driver.h</span></code>. As far as i can tell it’s not mentioned anywhere, if you have <em>any</em> info about it, it would help a lot if you could update this section. See <a class="reference internal" href="../../contribution/#contrib-section"><span class="std std-ref">Contributing</span></a>.</p>
@@ -436,20 +438,20 @@ indexhmd/resources/icons/
 </section>
 </section>
 <section id="driver-relative-paths">
-<h2>Driver Relative Paths<a class="headerlink" href="#driver-relative-paths" title="Permalink to this headline"></a></h2>
+<h2>Driver Relative Paths<a class="headerlink" href="#driver-relative-paths" title="Permalink to this heading"></a></h2>
 <p>After you register a driver SteamVR will interpret <code class="docutils literal notranslate"><span class="pre">{name</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">driver}</span></code> as <code class="docutils literal notranslate"><span class="pre">/path/to/your/driver/resources</span></code>, only works when paths are processed by OpenVR/SteamVR tools. Example: When setting icons for devices(either for status icons, bindings, models or other resources), to use icons shipped with your driver, you can use <code class="docutils literal notranslate"><span class="pre">{name</span> <span class="pre">of</span> <span class="pre">your</span> <span class="pre">driver}/icons/icon_name.png</span></code>.</p>
 </section>
 <section id="surface-level-driver-abi">
-<h2>Surface Level Driver ABI<a class="headerlink" href="#surface-level-driver-abi" title="Permalink to this headline"></a></h2>
+<h2>Surface Level Driver ABI<a class="headerlink" href="#surface-level-driver-abi" title="Permalink to this heading"></a></h2>
 <p>To be a functional driver you need to compile your source into a DLL or a Shared Object (depending on which platform you use).</p>
 <section id="hmd-driver-factory">
-<h3>HMD Driver Factory<a class="headerlink" href="#hmd-driver-factory" title="Permalink to this headline"></a></h3>
+<h3>HMD Driver Factory<a class="headerlink" href="#hmd-driver-factory" title="Permalink to this heading"></a></h3>
 <p>Your driver needs to export only a single symbol which is a function that with the following signature: <code class="docutils literal notranslate"><span class="pre">void*</span> <span class="pre">HmdDriverFactory(const</span> <span class="pre">char</span> <span class="pre">*pInterfaceName,</span> <span class="pre">int</span> <span class="pre">*outReturnCode)</span></code></p>
 <p>How does it work? Dead simple actually, <code class="docutils literal notranslate"><span class="pre">pInterfaceName</span></code> is a null terminated string with the name of the interface SteamVR runtime requests from your driver, if your driver implements the requested interface, return a raw pointer to it, if it does not match any of the interfaces implemented by your driver set <code class="docutils literal notranslate"><span class="pre">*outReturnCode</span></code> to <code class="docutils literal notranslate"><span class="pre">VRInitError_Init_InterfaceNotFound</span></code> and return <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
 <p>Why? Interfaces implemented in your driver get to SteamVR runtime through this function.</p>
 </section>
 <section id="driver-interfaces">
-<h3>Driver Interfaces<a class="headerlink" href="#driver-interfaces" title="Permalink to this headline"></a></h3>
+<h3>Driver Interfaces<a class="headerlink" href="#driver-interfaces" title="Permalink to this heading"></a></h3>
 <p>Honestly this topic is too big to be in the general surface level introduction to driver ABI, so it’s been moved to it’s own page <a class="reference internal" href="../driver-interfaces/#driver-interfaces"><span class="std std-ref">Driver Interfaces</span></a>.</p>
 </section>
 </section>
